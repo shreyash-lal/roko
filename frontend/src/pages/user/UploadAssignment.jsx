@@ -44,7 +44,7 @@ const UploadAssignment = () => {
       data.append('file', file);
 
       const res = await axios.post(
-        'http://localhost:5000/api/upload-assignment',
+        'https://roko-backend.onrender.com/api/upload-assignment',
         data,
         {
           headers: {

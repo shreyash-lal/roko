@@ -24,7 +24,7 @@ const OtpVerify = () => {
   const handleVerify = async () => {
     try {
       const res = await axios.post(
-        'http://localhost:5000/api/auth/verify-otp',
+        'https://roko-backend.onrender.com/api/auth/verify-otp',
         {
           ...userData,
           otp,

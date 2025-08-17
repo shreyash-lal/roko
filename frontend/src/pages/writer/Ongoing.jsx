@@ -19,7 +19,7 @@
 //       try {
 //         const token = localStorage.getItem('token');
 //         const res = await axios.get(
-//           'http://localhost:5000/api/assignments/ongoing',
+//           'https://roko-backend.onrender.com/api/assignments/ongoing',
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
@@ -41,7 +41,7 @@
 //     try {
 //       const token = localStorage.getItem('token');
 //       await axios.put(
-//         `http://localhost:5000/api/assignments/${id}/complete`,
+//         `https://roko-backend.onrender.com/api/assignments/${id}/complete`,
 //         {},
 //         { headers: { Authorization: `Bearer ${token}` } }
 //       );
@@ -101,7 +101,7 @@
 //             {selectedAssignment.file && (
 //               <div className="ongoingassignment-file">
 //                 <a
-//                   href={`http://localhost:5000/uploads/${selectedAssignment.fileUrl}`}
+//                   href={`https://roko-backend.onrender.com/uploads/${selectedAssignment.fileUrl}`}
 //                   target="_blank"
 //                   rel="noopener noreferrer"
 //                   className="ongoingassignment-file-link"

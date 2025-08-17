@@ -16,7 +16,7 @@ const AllAssignments = () => {
     const fetchAssignments = async () => {
       try {
         const res = await fetch(
-          'http://localhost:5000/api/assignments/pending'
+          'https://roko-backend.onrender.com/api/assignments/pending'
         );
         const data = await res.json();
         console.log('Assignments data:', data);
@@ -36,9 +36,12 @@ const AllAssignments = () => {
   // ✅ Assignment Accept
   const handleAccept = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/assignments/accept/${id}`, {
-        method: 'PUT',
-      });
+      await fetch(
+        `https://roko-backend.onrender.com/api/assignments/accept/${id}`,
+        {
+          method: 'PUT',
+        }
+      );
       setAssignments(assignments.filter((a) => a._id !== id));
       alert('Assignment accepted!');
     } catch (error) {
@@ -49,9 +52,12 @@ const AllAssignments = () => {
   // ✅ Assignment Deny
   const handleDeny = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/assignments/deny/${id}`, {
-        method: 'PUT',
-      });
+      await fetch(
+        `https://roko-backend.onrender.com/api/assignments/deny/${id}`,
+        {
+          method: 'PUT',
+        }
+      );
       setAssignments(assignments.filter((a) => a._id !== id));
       alert('Assignment denied!');
     } catch (error) {

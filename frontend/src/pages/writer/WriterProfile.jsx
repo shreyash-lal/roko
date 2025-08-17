@@ -50,7 +50,7 @@ const Profile = () => {
 
     try {
       const res = await fetch(
-        'http://localhost:5000/api/users/change-password',
+        'https://roko-backend.onrender.com/api/users/change-password',
         {
           method: 'PUT',
           headers: {

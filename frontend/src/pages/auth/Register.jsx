@@ -38,7 +38,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        'http://localhost:5000/api/auth/register',
+        'https://roko-backend.onrender.com/api/auth/register',
         formData
       );
       alert('OTP sent to your email');
