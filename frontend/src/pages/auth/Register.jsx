@@ -68,7 +68,7 @@ const Register = () => {
           <a href="/contact" className="regNav-link oxygen-regular">
             Contact
           </a>
-          <a href="/login" className="regNav-link oxygen-regular">
+          <a href="" className="regNav-link oxygen-regular">
             Login
           </a>
         </div>

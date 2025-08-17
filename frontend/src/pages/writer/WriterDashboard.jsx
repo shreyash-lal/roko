@@ -13,7 +13,7 @@ const WriterDashboard = () => {
   const handleLogout = () => {
     localStorage.removeItem('user');
     toast.info('Logged out successfully');
-    navigate('/login');
+    navigate('');
   };
 
   const navigate = useNavigate();
