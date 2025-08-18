@@ -35,7 +35,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        'https://roko-backend.onrender.com/api/auth',
+        'https://roko-backend.onrender.com/api/auth/login',
         formData
       );
 
