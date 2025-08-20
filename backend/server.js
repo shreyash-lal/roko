@@ -44,7 +44,7 @@ app.post("/pay", async (req, res) => {
       amount: amount * 100, // in paise
       redirectUrl: "https://roko.onrender.com/payment/callback", // frontend redirect url
       redirectMode: "POST",
-      callbackUrl: "https://roko.onrender.com//status", // backend callback
+      callbackUrl: "https://roko.onrender.com/status", // backend callback
       paymentInstrument: { type: "PAY_PAGE" },
     };
 
