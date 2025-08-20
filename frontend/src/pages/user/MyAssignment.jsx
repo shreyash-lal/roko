@@ -11,6 +11,18 @@ const MyAssignment = () => {
   };
   const [loading, setLoading] = useState(true);
 
+  const handlePayment = async () => {
+    const transactionId = 'T' + Date.now(); // unique ID
+    const { data } = await axios.post('http://localhost:5000/pay', {
+      amount: 100, // ₹100
+      transactionId,
+    });
+
+    if (data.success && data.data.instrumentResponse.redirectInfo.url) {
+      window.location.href = data.data.instrumentResponse.redirectInfo.url;
+    }
+  };
+
   useEffect(() => {
     // Simulate an API call to fetch dashboard data
     setTimeout(() => {
@@ -83,7 +95,7 @@ const MyAssignment = () => {
                   <h2>Artificial Intelligence</h2>
                   <div className="c-btns">
                     <button className="details">View Details</button>
-                    <button className="pay">Pay</button>
+                    <button onClick={handlePayment}>Pay with PhonePe</button>;
                   </div>
                 </div>
               </div>
