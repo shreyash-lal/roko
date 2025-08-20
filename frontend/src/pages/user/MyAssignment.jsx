@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Footer from '../../components/Footer';
 import Nav from '../../components/Nav';
 import Loader from '../../components/Loader';
+import axios from 'axios';
 
 const MyAssignment = () => {
   const [activeTab, setActiveTab] = useState('pending');
@@ -12,14 +13,23 @@ const MyAssignment = () => {
   const [loading, setLoading] = useState(true);
 
   const handlePayment = async () => {
-    const transactionId = 'T' + Date.now(); // unique ID
-    const { data } = await axios.post('https://roko.onrender.com/pay', {
-      amount: 100, // ₹100
-      transactionId,
-    });
+    try {
+      const transactionId = 'T' + Date.now();
+      const { data } = await axios.post('https://roko.onrender.com/pay', {
+        amount: 100,
+        transactionId,
+      });
 
-    if (data.success && data.data.instrumentResponse.redirectInfo.url) {
-      window.location.href = data.data.instrumentResponse.redirectInfo.url;
+      console.log('PhonePe Response:', data); // 👀 debug
+
+      if (data.success && data.data.instrumentResponse.redirectInfo.url) {
+        window.location.href = data.data.instrumentResponse.redirectInfo.url;
+      } else {
+        alert('Payment initiation failed: ' + JSON.stringify(data));
+      }
+    } catch (err) {
+      console.error('Payment Error:', err);
+      alert('Error: ' + err.message);
     }
   };
 
