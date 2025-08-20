@@ -63,8 +63,8 @@ app.post("/pay", async (req, res) => {
       merchantTransactionId: transactionId,
       merchantUserId: "U123", // replace with actual user ID
       amount: amount * 100, // in paise
-      redirectUrl: "https://roko.onrender.com/payment/callback",
-      callbackUrl: "https://roko.onrender.com/status",
+      redirectUrl: "https://roko-backend.onrender.com/payment/callback",
+      callbackUrl: "https://roko-backend.onrender.com/status",
       paymentInstrument: { type: "PAY_PAGE" },
     };
 
