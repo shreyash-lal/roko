@@ -15,10 +15,13 @@ const MyAssignment = () => {
   const handlePayment = async () => {
     try {
       const transactionId = 'T' + Date.now();
-      const { data } = await axios.post('https://roko.onrender.com/pay', {
-        amount: 100,
-        transactionId,
-      });
+      const { data } = await axios.post(
+        'https://roko-backend.onrender.com/pay',
+        {
+          amount: 100,
+          transactionId,
+        }
+      );
 
       console.log('PhonePe Response:', data); // 👀 debug
 
