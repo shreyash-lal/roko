@@ -13,7 +13,7 @@ const MyAssignment = () => {
 
   const handlePayment = async () => {
     const transactionId = 'T' + Date.now(); // unique ID
-    const { data } = await axios.post('http://localhost:5000/pay', {
+    const { data } = await axios.post('https://roko.onrender.com/pay', {
       amount: 100, // ₹100
       transactionId,
     });
