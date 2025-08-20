@@ -54,6 +54,7 @@ app.use("/api/assignments", assignmentRoutes);
 
 // 📌 Payment Initiation
 app.post("/pay", async (req, res) => {
+  console.log("📩 Payment Request:", req.body);
   try {
     const { amount, transactionId } = req.body;
     const token = await getAccessToken();
@@ -72,6 +73,8 @@ app.post("/pay", async (req, res) => {
       payload,
       { headers: { Authorization: `Bearer ${token}` } }
     );
+
+    console.log("📤 PhonePe Raw Response:", response.data);
 
     res.json(response.data);
   } catch (err) {
