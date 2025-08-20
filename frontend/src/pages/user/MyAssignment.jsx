@@ -95,7 +95,9 @@ const MyAssignment = () => {
                   <h2>Artificial Intelligence</h2>
                   <div className="c-btns">
                     <button className="details">View Details</button>
-                    <button onClick={handlePayment}>Pay with PhonePe</button>;
+                    <button className="pay" onClick={handlePayment}>
+                      Pay with PhonePe
+                    </button>
                   </div>
                 </div>
               </div>
