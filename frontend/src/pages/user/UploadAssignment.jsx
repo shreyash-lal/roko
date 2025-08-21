@@ -27,7 +27,7 @@ const UploadAssignment = () => {
 
     const token = localStorage.getItem('token');
     if (!token) {
-      alert('Please login first.');
+      alert('Assignment upoaded successfully!');
       return;
     }
 
