@@ -3,6 +3,7 @@ import Footer from '../../components/Footer';
 import Nav from '../../components/Nav';
 import Loader from '../../components/Loader';
 import axios from 'axios';
+import { loadStripe } from '@stripe/stripe-js';
 
 // Stripe imports
 import { loadStripe } from '@stripe/stripe-js';
