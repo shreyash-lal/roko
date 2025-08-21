@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../App.css'; // Assuming you have a CSS file for styles
+import Footer from '../../components/Footer';
+import Nav from '../../components/Nav';
 
 const amountINR = (num) =>
   new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(
@@ -163,7 +165,7 @@ const Divider = ({ text = 'or' }) => (
 );
 
 export default function PaymentGateway({
-  amount = 499, // rupees
+  amount = 99, // rupees
   orderId = 'ORD-' + Math.floor(Math.random() * 1e6),
   customer = { name: 'Shreyash', email: 'shreyash@example.com' },
 }) {
@@ -219,230 +221,239 @@ export default function PaymentGateway({
       .trim();
 
   return (
-    <div className="pg-wrap">
-      <div className="pg-card pg-animate-up">
-        <header className="pg-header">
-          <div className="pg-brand">
-            <span className="pg-dot" />
-            <span className="pg-title">Roko • Secure Checkout</span>
+    <>
+      <Nav />
+      <div className="pg-wrap">
+        <div className="pg-card pg-animate-up">
+          <header className="pg-header">
+            <div className="pg-brand">
+              <span className="pg-dot" />
+              <span className="pg-title">Roko • Secure Checkout</span>
+            </div>
+            <div className="pg-amount">{amountINR(amount)}</div>
+          </header>
+
+          {/* Tabs */}
+          <div className="pg-tabs">
+            <Tab
+              active={tab === 'upi'}
+              onClick={() => setTab('upi')}
+              icon={<InlineIcon id="upi" />}
+              label="UPI"
+            />
+            <Tab
+              active={tab === 'card'}
+              onClick={() => setTab('card')}
+              icon={<InlineIcon id="card" />}
+              label="Card"
+            />
+            <Tab
+              active={tab === 'bank'}
+              onClick={() => setTab('bank')}
+              icon={<InlineIcon id="bank" />}
+              label="NetBanking"
+            />
+            <span
+              className="pg-tabs__glider"
+              data-active={tab}
+              aria-hidden="true"
+            />
           </div>
-          <div className="pg-amount">{amountINR(amount)}</div>
-        </header>
 
-        {/* Tabs */}
-        <div className="pg-tabs">
-          <Tab
-            active={tab === 'upi'}
-            onClick={() => setTab('upi')}
-            icon={<InlineIcon id="upi" />}
-            label="UPI"
-          />
-          <Tab
-            active={tab === 'card'}
-            onClick={() => setTab('card')}
-            icon={<InlineIcon id="card" />}
-            label="Card"
-          />
-          <Tab
-            active={tab === 'bank'}
-            onClick={() => setTab('bank')}
-            icon={<InlineIcon id="bank" />}
-            label="NetBanking"
-          />
-          <span
-            className="pg-tabs__glider"
-            data-active={tab}
-            aria-hidden="true"
-          />
-        </div>
-
-        {/* Content */}
-        <div className="pg-body">
-          {tab === 'upi' && (
-            <section className="pg-pane pg-pane--active">
-              <div className="pg-grid">
-                {UPI_APPS.map((u) => (
-                  <button
-                    key={u.id}
-                    type="button"
-                    className={`pg-upi ${upiApp === u.id ? 'active' : ''}`}
-                    onClick={() => setUpiApp(u.id)}
-                    style={{ '--accent': u.color }}
-                  >
-                    <InlineIcon id={u.id} size={24} />
-                    <span>{u.label}</span>
-                  </button>
-                ))}
-              </div>
-
-              <Divider text="or pay via VPA" />
-
-              <Field
-                label="Your UPI ID (VPA)"
-                hint="Example: username@okaxis"
-                right={<span className="pg-badge">Auto validate</span>}
-              >
-                <input
-                  className="pg-input"
-                  placeholder="name@bank"
-                  value={upiVpa}
-                  onChange={(e) => setUpiVpa(e.target.value)}
-                />
-              </Field>
-            </section>
-          )}
-
-          {tab === 'card' && (
-            <section className="pg-pane pg-pane--active">
-              <Field
-                label="Card Number"
-                right={
-                  <div className="pg-cardbrands">
-                    <InlineIcon id="visa" />
-                    <InlineIcon id="mc" />
-                    <InlineIcon id="rupay" />
-                  </div>
-                }
-              >
-                <input
-                  inputMode="numeric"
-                  className="pg-input"
-                  placeholder="1234 5678 9012 3456"
-                  value={card.number}
-                  onChange={(e) =>
-                    setCard((c) => ({ ...c, number: maskCard(e.target.value) }))
-                  }
-                />
-              </Field>
-
-              <div className="pg-row">
-                <Field label="Name on Card">
-                  <input
-                    className="pg-input"
-                    placeholder="Full Name"
-                    value={card.name}
-                    onChange={(e) =>
-                      setCard((c) => ({ ...c, name: e.target.value }))
-                    }
-                  />
-                </Field>
-              </div>
-
-              <div className="pg-row">
-                <Field label="Expiry (MM/YY)">
-                  <input
-                    className="pg-input"
-                    inputMode="numeric"
-                    placeholder="07/28"
-                    value={card.expiry}
-                    onChange={(e) =>
-                      setCard((c) => ({
-                        ...c,
-                        expiry: e.target.value
-                          .replace(/[^\d/]/g, '')
-                          .slice(0, 5),
-                      }))
-                    }
-                  />
-                </Field>
-                <Field label="CVV">
-                  <input
-                    className="pg-input"
-                    inputMode="numeric"
-                    placeholder="123"
-                    value={card.cvv}
-                    onChange={(e) =>
-                      setCard((c) => ({
-                        ...c,
-                        cvv: e.target.value.replace(/[^\d]/g, '').slice(0, 4),
-                      }))
-                    }
-                  />
-                </Field>
-              </div>
-
-              <label className="pg-save">
-                <input
-                  type="checkbox"
-                  checked={saving}
-                  onChange={(e) => setSaving(e.target.checked)}
-                />
-                <span>Securely save this card for faster checkout</span>
-              </label>
-            </section>
-          )}
-
-          {tab === 'bank' && (
-            <section className="pg-pane pg-pane--active">
-              <Field label="Choose your bank">
-                <select
-                  className="pg-input"
-                  value={bank}
-                  onChange={(e) => setBank(e.target.value)}
-                >
-                  {BANKS.map((b) => (
-                    <option key={b}>{b}</option>
+          {/* Content */}
+          <div className="pg-body">
+            {tab === 'upi' && (
+              <section className="pg-pane pg-pane--active">
+                <div className="pg-grid">
+                  {UPI_APPS.map((u) => (
+                    <button
+                      key={u.id}
+                      type="button"
+                      className={`pg-upi ${upiApp === u.id ? 'active' : ''}`}
+                      onClick={() => setUpiApp(u.id)}
+                      style={{ '--accent': u.color }}
+                    >
+                      <InlineIcon id={u.id} size={24} />
+                      <span>{u.label}</span>
+                    </button>
                   ))}
-                </select>
-              </Field>
-              <p className="pg-note">
-                You’ll be redirected to your bank’s login page to complete the
-                payment (simulated).
-              </p>
-            </section>
-          )}
-        </div>
+                </div>
 
-        {/* Footer / CTA */}
-        <footer className="pg-footer">
-          <div className="pg-order">
-            <div>
-              <div className="pg-order__label">Order ID</div>
-              <div className="pg-order__val">{orderId}</div>
-            </div>
-            <div>
-              <div className="pg-order__label">Payable</div>
-              <div className="pg-order__val">{amountINR(amount)}</div>
-            </div>
+                <Divider text="or pay via VPA" />
+
+                <Field
+                  label="Your UPI ID (VPA)"
+                  hint="Example: username@okaxis"
+                  right={<span className="pg-badge">Auto validate</span>}
+                >
+                  <input
+                    className="pg-input"
+                    placeholder="name@bank"
+                    value={upiVpa}
+                    onChange={(e) => setUpiVpa(e.target.value)}
+                  />
+                </Field>
+              </section>
+            )}
+
+            {tab === 'card' && (
+              <section className="pg-pane pg-pane--active">
+                <Field
+                  label="Card Number"
+                  right={
+                    <div className="pg-cardbrands">
+                      <InlineIcon id="visa" />
+                      <InlineIcon id="mc" />
+                      <InlineIcon id="rupay" />
+                    </div>
+                  }
+                >
+                  <input
+                    inputMode="numeric"
+                    className="pg-input"
+                    placeholder="1234 5678 9012 3456"
+                    value={card.number}
+                    onChange={(e) =>
+                      setCard((c) => ({
+                        ...c,
+                        number: maskCard(e.target.value),
+                      }))
+                    }
+                  />
+                </Field>
+
+                <div className="pg-row">
+                  <Field label="Name on Card">
+                    <input
+                      className="pg-input"
+                      placeholder="Full Name"
+                      value={card.name}
+                      onChange={(e) =>
+                        setCard((c) => ({ ...c, name: e.target.value }))
+                      }
+                    />
+                  </Field>
+                </div>
+
+                <div className="pg-row">
+                  <Field label="Expiry (MM/YY)">
+                    <input
+                      className="pg-input"
+                      inputMode="numeric"
+                      placeholder="07/28"
+                      value={card.expiry}
+                      onChange={(e) =>
+                        setCard((c) => ({
+                          ...c,
+                          expiry: e.target.value
+                            .replace(/[^\d/]/g, '')
+                            .slice(0, 5),
+                        }))
+                      }
+                    />
+                  </Field>
+                  <Field label="CVV">
+                    <input
+                      className="pg-input"
+                      inputMode="numeric"
+                      placeholder="123"
+                      value={card.cvv}
+                      onChange={(e) =>
+                        setCard((c) => ({
+                          ...c,
+                          cvv: e.target.value.replace(/[^\d]/g, '').slice(0, 4),
+                        }))
+                      }
+                    />
+                  </Field>
+                </div>
+
+                <label className="pg-save">
+                  <input
+                    type="checkbox"
+                    checked={saving}
+                    onChange={(e) => setSaving(e.target.checked)}
+                  />
+                  <span>Securely save this card for faster checkout</span>
+                </label>
+              </section>
+            )}
+
+            {tab === 'bank' && (
+              <section className="pg-pane pg-pane--active">
+                <Field label="Choose your bank">
+                  <select
+                    className="pg-input"
+                    value={bank}
+                    onChange={(e) => setBank(e.target.value)}
+                  >
+                    {BANKS.map((b) => (
+                      <option key={b}>{b}</option>
+                    ))}
+                  </select>
+                </Field>
+                <p className="pg-note">
+                  You’ll be redirected to your bank’s login page to complete the
+                  payment (simulated).
+                </p>
+              </section>
+            )}
           </div>
 
-          <button
-            className={`pg-paybtn ${processing ? 'loading' : ''}`}
-            disabled={payDisabled}
-            onClick={handlePay}
-            type="button"
-          >
-            {processing ? (
-              <span className="pg-loader" aria-hidden />
-            ) : (
-              'Pay Securely'
-            )}
-          </button>
-        </footer>
-      </div>
+          {/* Footer / CTA */}
+          <footer className="pg-footer">
+            <div className="pg-order">
+              <div>
+                <div className="pg-order__label">Order ID</div>
+                <div className="pg-order__val">{orderId}</div>
+              </div>
+              <div>
+                <div className="pg-order__label">Payable</div>
+                <div className="pg-order__val">{amountINR(amount)}</div>
+              </div>
+            </div>
 
-      {/* Result Toast */}
-      {status && (
-        <div
-          className={`pg-toast ${
-            status === 'success' ? 'pg-toast--ok' : 'pg-toast--err'
-          }`}
-          role="status"
-        >
-          {status === 'success' ? '✅ Payment Successful' : '❌ Payment Failed'}
-          <button
-            className="pg-toast__close"
-            onClick={() => setStatus(null)}
-            aria-label="Close"
-          >
-            ×
-          </button>
+            <button
+              className={`pg-paybtn ${processing ? 'loading' : ''}`}
+              disabled={payDisabled}
+              onClick={handlePay}
+              type="button"
+            >
+              {processing ? (
+                <span className="pg-loader" aria-hidden />
+              ) : (
+                'Pay Securely'
+              )}
+            </button>
+          </footer>
         </div>
-      )}
 
-      {/* Background animated blobs */}
-      <div className="pg-blob pg-blob--one" />
-      <div className="pg-blob pg-blob--two" />
-    </div>
+        {/* Result Toast */}
+        {status && (
+          <div
+            className={`pg-toast ${
+              status === 'success' ? 'pg-toast--ok' : 'pg-toast--err'
+            }`}
+            role="status"
+          >
+            {status === 'success'
+              ? '✅ Payment Successful'
+              : '❌ Payment Failed'}
+            <button
+              className="pg-toast__close"
+              onClick={() => setStatus(null)}
+              aria-label="Close"
+            >
+              ×
+            </button>
+          </div>
+        )}
+
+        {/* Background animated blobs */}
+        <div className="pg-blob pg-blob--one" />
+        <div className="pg-blob pg-blob--two" />
+      </div>
+      <Footer />
+    </>
   );
 }
