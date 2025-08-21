@@ -2828,11 +2828,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 18px 22px;
-  background: linear-gradient(
-    90deg,
-    rgba(124, 58, 237, 0.18),
-    rgba(6, 182, 212, 0.18)
-  );
+  background-color: var(--main-color);
   border-bottom: 1px solid var(--pg-border);
 }
 
@@ -3048,7 +3044,7 @@ body {
   justify-content: space-between;
   gap: 16px;
   padding: 14px 18px;
-  background: rgba(15, 23, 42, 0.55);
+  background-color: var(--white);
 }
 
 .pg-order {
@@ -3067,7 +3063,7 @@ body {
   appearance: none;
   border: none;
   color: white;
-  background: linear-gradient(90deg, var(--pg-accent), var(--pg-accent-2));
+  background-color: var(--main-color);
   padding: 12px 22px;
   border-radius: 12px;
   font-weight: 700;

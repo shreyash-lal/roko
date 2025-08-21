@@ -228,7 +228,9 @@ export default function PaymentGateway({
           <header className="pg-header">
             <div className="pg-brand">
               <span className="pg-dot" />
-              <span className="pg-title">Roko • Secure Checkout</span>
+              <span className="pg-title oxygen-regular">
+                Roko • Secure Checkout
+              </span>
             </div>
             <div className="pg-amount">{amountINR(amount)}</div>
           </header>
