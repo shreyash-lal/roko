@@ -45,7 +45,7 @@ const InlineIcon = ({ id, size = 20 }) => {
     case 'phonepe':
       return <img src="/phonepe.png" alt="" />;
     case 'gpay':
-      return <img src="/gpay.jpeg" alt="" />;
+      return <img src="/gpay.png" alt="" />;
     case 'paytm':
       return <img src="/paytm.png" alt="" />;
     case 'card':

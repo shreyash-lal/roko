@@ -2942,7 +2942,8 @@ body {
 
 .pg-upi:hover {
   transform: translateY(-4px);
-  background: var(--accent, #333);
+  background-color: #fff;
+  color: black;
 }
 
 .pg-upi.active {
