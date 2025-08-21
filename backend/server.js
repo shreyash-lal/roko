@@ -18,7 +18,7 @@ dotenv.config();
 connectDB();
 
 // 🔑 Stripe init
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+// const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 app.use(cors());
