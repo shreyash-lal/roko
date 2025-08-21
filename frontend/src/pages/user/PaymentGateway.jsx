@@ -43,46 +43,11 @@ const InlineIcon = ({ id, size = 20 }) => {
   const common = { width: size, height: size, viewBox: '0 0 24 24' };
   switch (id) {
     case 'phonepe':
-      return (
-        <svg {...common} fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="10" fill="#5f259f" />
-          <path
-            d="M8 9.5h8M12 9.5v7"
-            stroke="#fff"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-        </svg>
-      );
+      return <img src="/phonepe.png" alt="" />;
     case 'gpay':
-      return (
-        <svg {...common} xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2Z"
-            fill="#fff"
-          />
-          <path d="M12 2a10 10 0 0 1 8.66 5.01L12 12V2Z" fill="#1a73e8" />
-          <path
-            d="M20.66 7.01A10 10 0 0 1 12 22v-10l8.66-4.99Z"
-            fill="#34a853"
-          />
-          <path d="M12 22A10 10 0 0 1 3.34 7.01L12 12v10Z" fill="#fbbc05" />
-          <path d="M3.34 7.01A10 10 0 0 1 12 2v10L3.34 7.01Z" fill="#ea4335" />
-        </svg>
-      );
+      return <img src="/gpay.jpeg" alt="" />;
     case 'paytm':
-      return (
-        <svg {...common} xmlns="http://www.w3.org/2000/svg">
-          <rect width="24" height="24" rx="5" fill="#00baf2" />
-          <path d="M7 8h10v8H7z" fill="#fff" opacity=".2" />
-          <path
-            d="M8 10h8M8 14h8"
-            stroke="#fff"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-        </svg>
-      );
+      return <img src="/paytm.png" alt="" />;
     case 'card':
       return (
         <svg {...common} xmlns="http://www.w3.org/2000/svg" fill="none">
