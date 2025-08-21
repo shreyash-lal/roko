@@ -2869,7 +2869,7 @@ body {
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   padding: 12px;
-  background: rgba(15, 23, 42, 0.55);
+  background: rgba(248, 243, 243, 0.55);
   border-bottom: 1px solid var(--pg-border);
 }
 
@@ -2877,7 +2877,7 @@ body {
   position: relative;
   border: 1px solid var(--pg-border);
   background: #0b1224;
-  color: #dbeafe;
+  color: var(--main-color);
   padding: 12px 14px;
   border-radius: 12px;
   display: flex;
