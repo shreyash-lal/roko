@@ -33,7 +33,7 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/assignments", assignmentRoutes);
 
 // 📌 Payment Initiation (Stripe)
-app.post("https://roko-backend.onrender.com/pay", async (req, res) => {
+app.post("/pay", async (req, res) => {
   console.log("📩 Payment Request:", req.body);
   try {
     const { amount, currency = "inr" } = req.body;
@@ -57,7 +57,7 @@ app.post("https://roko-backend.onrender.com/pay", async (req, res) => {
 });
 
 // 📌 Payment Status Check (Stripe)
-app.post("https://roko-backend.onrender.com/status", async (req, res) => {
+app.post("/status", async (req, res) => {
   try {
     const { paymentIntentId } = req.body;
 
