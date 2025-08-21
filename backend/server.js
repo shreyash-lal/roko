@@ -75,6 +75,8 @@ app.post("/status", async (req, res) => {
   }
 });
 
+console.log("Stripe Key Loaded:", process.env.STRIPE_SECRET_KEY ? "Yes" : "No");
+
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

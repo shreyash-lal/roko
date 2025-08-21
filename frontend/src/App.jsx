@@ -17,6 +17,7 @@ import PrivateRoute from './components/PrivateRoute';
 import Faq from './pages/user/Faq';
 import Profile from './pages/user/Profile';
 import Loader from './components/Loader';
+import PaymentGateway from './pages/user/PaymentGateway';
 import WriterDashboard from './pages/writer/WriterDashboard';
 import WriterHelp from './pages/writer/WriterHelp';
 import WriterProfile from './pages/writer/WriterProfile';
@@ -46,6 +47,7 @@ const Layout = ({ children }) => {
     '/my-assignments',
     '/upload-assignment',
     '/notifications',
+    '/payment',
     '/writer-dashboard',
     '/writer-profile',
     '/writer-help',
@@ -141,6 +143,16 @@ const App = () => {
             <PrivateRoute allowedRoles={['user']}>
               <Layout>
                 <Notification />
+              </Layout>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/payment"
+          element={
+            <PrivateRoute allowedRoles={['user']}>
+              <Layout>
+                <PaymentGateway />
               </Layout>
             </PrivateRoute>
           }

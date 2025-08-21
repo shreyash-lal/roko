@@ -12,6 +12,7 @@ import {
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js';
+import { useNavigate } from 'react-router-dom';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -22,8 +23,8 @@ const CheckoutForm = ({ amount }) => {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
+    useNavigate('/payment');
     e.preventDefault();
-    if (!stripe || !elements) return;
 
     setLoading(true);
 
@@ -64,11 +65,10 @@ const CheckoutForm = ({ amount }) => {
     <form onSubmit={handleSubmit} className="payment-form">
       <CardElement className="border p-2 rounded mb-2" />
       <button
-        type="submit"
-        disabled={!stripe || loading}
+        onClick={handleSubmit}
         className="pay bg-blue-600 text-white px-4 py-2 rounded"
       >
-        {loading ? 'Processing...' : `Pay ₹${amount}`}
+        Pay
       </button>
     </form>
   );
