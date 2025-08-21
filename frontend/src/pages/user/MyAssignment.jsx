@@ -3,89 +3,27 @@ import Footer from '../../components/Footer';
 import Nav from '../../components/Nav';
 import Loader from '../../components/Loader';
 import axios from 'axios';
-// Stripe imports
-import { loadStripe } from '@stripe/stripe-js';
-
-import {
-  Elements,
-  CardElement,
-  useStripe,
-  useElements,
-} from '@stripe/react-stripe-js';
 import { useNavigate } from 'react-router-dom';
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-
-// ✅ Payment Form Component
-const CheckoutForm = ({ amount }) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e) => {
-    useNavigate('/payment');
-    e.preventDefault();
-
-    setLoading(true);
-
-    try {
-      // 🔑 Create PaymentIntent from backend
-      const { data } = await axios.post(
-        'https://roko-backend.onrender.com/pay',
-        {
-          amount,
-        }
-      );
-
-      const clientSecret = data.clientSecret;
-
-      // 💳 Confirm card payment
-      const result = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: elements.getElement(CardElement),
-        },
-      });
-
-      if (result.error) {
-        alert('Payment failed: ' + result.error.message);
-      } else {
-        if (result.paymentIntent.status === 'succeeded') {
-          alert('✅ Payment successful!');
-        }
-      }
-    } catch (err) {
-      console.error('Payment Error:', err);
-      alert('Error: ' + err.message);
-    }
-
-    setLoading(false);
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="payment-form">
-      <CardElement className="border p-2 rounded mb-2" />
-      <button
-        onClick={handleSubmit}
-        className="pay bg-blue-600 text-white px-4 py-2 rounded"
-      >
-        Pay
-      </button>
-    </form>
-  );
-};
 
 const MyAssignment = () => {
   const [activeTab, setActiveTab] = useState('pending');
-  const [loading, setLoading] = useState(true);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  const handlePayment = () => {
+    // Redirect to payment gateway
+    navigate('/payment');
+  };
 
   useEffect(() => {
+    // Simulate an API call to fetch dashboard data
     setTimeout(() => {
       setLoading(false);
-    }, 1500);
+    }, 1500); // Simulating a 1 second delay
   }, []);
 
   if (loading) {
@@ -123,6 +61,23 @@ const MyAssignment = () => {
         <div className="mt-4">
           {activeTab === 'pending' && (
             <div className="pending-content oxygen-regular">
+              {/* <div className="abox">
+                <div className="pbox">
+                  <h2>Assignment 1</h2>
+                  <button className="details">View Details</button>
+                  <h2 className="bill">₹ 100</h2>
+                </div>
+                <div className="pbox">
+                  <h2>Assignment 2</h2>
+                  <button className="details">View Details</button>
+                  <h2 className="bill">₹ 100</h2>
+                </div>
+                <div className="pbox">
+                  <h2>Assignment 3</h2>
+                  <button className="details">View Details</button>
+                  <h2 className="bill">₹ 100</h2>
+                </div>
+              </div> */}
               <div className="pbox">
                 <h2>No Pending Assignments</h2>
               </div>
@@ -136,10 +91,9 @@ const MyAssignment = () => {
                   <h2>Artificial Intelligence</h2>
                   <div className="c-btns">
                     <button className="details">View Details</button>
-                    {/* Stripe Payment Form */}
-                    <Elements stripe={stripePromise}>
-                      <CheckoutForm amount={100} />
-                    </Elements>
+                    <button className="pay" onClick={handlePayment}>
+                      Pay
+                    </button>
                   </div>
                 </div>
               </div>

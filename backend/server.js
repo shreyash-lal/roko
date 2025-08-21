@@ -9,7 +9,7 @@ import notificationRoutes from "./routes/notificationRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import bodyParser from "body-parser";
-import Stripe from "stripe";
+// import Stripe from "stripe";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,49 +33,49 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/assignments", assignmentRoutes);
 
 // 📌 Payment Initiation (Stripe)
-app.post("/pay", async (req, res) => {
-  console.log("📩 Payment Request:", req.body);
-  try {
-    const { amount, currency = "inr" } = req.body;
+// app.post("/pay", async (req, res) => {
+//   console.log("📩 Payment Request:", req.body);
+//   try {
+//     const { amount, currency = "inr" } = req.body;
 
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount * 100, // convert to paise
-      currency,
-      payment_method_types: ["card"],
-    });
+//     const paymentIntent = await stripe.paymentIntents.create({
+//       amount: amount * 100, // convert to paise
+//       currency,
+//       payment_method_types: ["card"],
+//     });
 
-    console.log("📤 Stripe PaymentIntent Created:", paymentIntent.id);
+//     console.log("📤 Stripe PaymentIntent Created:", paymentIntent.id);
 
-    res.json({
-      clientSecret: paymentIntent.client_secret,
-      paymentIntentId: paymentIntent.id,
-    });
-  } catch (err) {
-    console.error("Stripe Payment initiation error:", err.message);
-    res.status(500).send("Payment initiation failed");
-  }
-});
+//     res.json({
+//       clientSecret: paymentIntent.client_secret,
+//       paymentIntentId: paymentIntent.id,
+//     });
+//   } catch (err) {
+//     console.error("Stripe Payment initiation error:", err.message);
+//     res.status(500).send("Payment initiation failed");
+//   }
+// });
 
-// 📌 Payment Status Check (Stripe)
-app.post("/status", async (req, res) => {
-  try {
-    const { paymentIntentId } = req.body;
+// // 📌 Payment Status Check (Stripe)
+// app.post("/status", async (req, res) => {
+//   try {
+//     const { paymentIntentId } = req.body;
 
-    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+//     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
 
-    res.json({
-      status: paymentIntent.status,
-      id: paymentIntent.id,
-      amount: paymentIntent.amount,
-      currency: paymentIntent.currency,
-    });
-  } catch (err) {
-    console.error("Stripe Status check error:", err.message);
-    res.status(500).send("Status check failed");
-  }
-});
+//     res.json({
+//       status: paymentIntent.status,
+//       id: paymentIntent.id,
+//       amount: paymentIntent.amount,
+//       currency: paymentIntent.currency,
+//     });
+//   } catch (err) {
+//     console.error("Stripe Status check error:", err.message);
+//     res.status(500).send("Status check failed");
+//   }
+// });
 
-console.log("Stripe Key Loaded:", process.env.STRIPE_SECRET_KEY ? "Yes" : "No");
+// console.log("Stripe Key Loaded:", process.env.STRIPE_SECRET_KEY ? "Yes" : "No");
 
 // Start server
 const PORT = process.env.PORT || 5000;
