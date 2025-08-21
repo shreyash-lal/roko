@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import './App.css';
+import { useNavigate } from 'react-router-dom';
+import '../../App.css'; // Assuming you have a CSS file for styles
 
 const amountINR = (num) =>
   new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(
