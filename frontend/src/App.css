@@ -2816,7 +2816,7 @@ body {
     rgba(255, 255, 255, 0.02),
     rgba(255, 255, 255, 0.01)
   );
-  border: 1px solid var(--pg-border);
+  border: 1px solid var(--border);
   border-radius: 20px;
   box-shadow: var(--pg-shadow);
   backdrop-filter: blur(8px);
