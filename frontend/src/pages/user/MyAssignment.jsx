@@ -4,43 +4,88 @@ import Nav from '../../components/Nav';
 import Loader from '../../components/Loader';
 import axios from 'axios';
 
-const MyAssignment = () => {
-  const [activeTab, setActiveTab] = useState('pending');
+// Stripe imports
+import { loadStripe } from '@stripe/stripe-js';
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from '@stripe/react-stripe-js';
 
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
-  const [loading, setLoading] = useState(true);
+const stripePromise = loadStripe(process.env.STRIPE_PUBLISHABLE_KEY);
 
-  const handlePayment = async () => {
+// ✅ Payment Form Component
+const CheckoutForm = ({ amount }) => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!stripe || !elements) return;
+
+    setLoading(true);
+
     try {
-      const transactionId = 'T' + Date.now();
+      // 🔑 Create PaymentIntent from backend
       const { data } = await axios.post(
         'https://roko-backend.onrender.com/pay',
         {
-          amount: 100,
-          transactionId,
+          amount,
         }
       );
 
-      console.log('PhonePe Response:', data); // 👀 debug
+      const clientSecret = data.clientSecret;
 
-      if (data.success && data.data.instrumentResponse.redirectInfo.url) {
-        window.location.href = data.data.instrumentResponse.redirectInfo.url;
+      // 💳 Confirm card payment
+      const result = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: elements.getElement(CardElement),
+        },
+      });
+
+      if (result.error) {
+        alert('Payment failed: ' + result.error.message);
       } else {
-        alert('Payment initiation failed: ' + JSON.stringify(data));
+        if (result.paymentIntent.status === 'succeeded') {
+          alert('✅ Payment successful!');
+        }
       }
     } catch (err) {
       console.error('Payment Error:', err);
       alert('Error: ' + err.message);
     }
+
+    setLoading(false);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="payment-form">
+      <CardElement className="border p-2 rounded mb-2" />
+      <button
+        type="submit"
+        disabled={!stripe || loading}
+        className="pay bg-blue-600 text-white px-4 py-2 rounded"
+      >
+        {loading ? 'Processing...' : `Pay ₹${amount}`}
+      </button>
+    </form>
+  );
+};
+
+const MyAssignment = () => {
+  const [activeTab, setActiveTab] = useState('pending');
+  const [loading, setLoading] = useState(true);
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
   };
 
   useEffect(() => {
-    // Simulate an API call to fetch dashboard data
     setTimeout(() => {
       setLoading(false);
-    }, 1500); // Simulating a 1 second delay
+    }, 1500);
   }, []);
 
   if (loading) {
@@ -78,23 +123,6 @@ const MyAssignment = () => {
         <div className="mt-4">
           {activeTab === 'pending' && (
             <div className="pending-content oxygen-regular">
-              {/* <div className="abox">
-                <div className="pbox">
-                  <h2>Assignment 1</h2>
-                  <button className="details">View Details</button>
-                  <h2 className="bill">₹ 100</h2>
-                </div>
-                <div className="pbox">
-                  <h2>Assignment 2</h2>
-                  <button className="details">View Details</button>
-                  <h2 className="bill">₹ 100</h2>
-                </div>
-                <div className="pbox">
-                  <h2>Assignment 3</h2>
-                  <button className="details">View Details</button>
-                  <h2 className="bill">₹ 100</h2>
-                </div>
-              </div> */}
               <div className="pbox">
                 <h2>No Pending Assignments</h2>
               </div>
@@ -108,9 +136,10 @@ const MyAssignment = () => {
                   <h2>Artificial Intelligence</h2>
                   <div className="c-btns">
                     <button className="details">View Details</button>
-                    <button className="pay" onClick={handlePayment}>
-                      Pay with PhonePe
-                    </button>
+                    {/* Stripe Payment Form */}
+                    <Elements stripe={stripePromise}>
+                      <CheckoutForm amount={100} />
+                    </Elements>
                   </div>
                 </div>
               </div>

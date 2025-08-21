@@ -9,7 +9,7 @@ import notificationRoutes from "./routes/notificationRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import bodyParser from "body-parser";
-import axios from "axios";
+import Stripe from "stripe";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,28 +17,8 @@ const __dirname = path.dirname(__filename);
 dotenv.config();
 connectDB();
 
-// 🔑 PhonePe credentials from .env
-const clientId = process.env.PHONEPE_CLIENT_ID;
-const clientSecret = process.env.PHONEPE_CLIENT_SECRET;
-const phonePeBaseUrl = "https://api-preprod.phonepe.com";
-
-// 🔐 Function to generate Access Token
-async function getAccessToken() {
-  try {
-    const res = await axios.post(`${phonePeBaseUrl}/oauth/token`, {
-      clientId,
-      clientSecret,
-      grantType: "client_credentials",
-    });
-    return res.data.accessToken;
-  } catch (err) {
-    console.error(
-      "Error generating PhonePe token:",
-      err.response?.data || err.message
-    );
-    throw new Error("Failed to generate PhonePe access token");
-  }
-}
+// 🔑 Stripe init
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 app.use(cors());
@@ -52,54 +32,45 @@ app.use("/api", assignmentRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/assignments", assignmentRoutes);
 
-// 📌 Payment Initiation
+// 📌 Payment Initiation (Stripe)
 app.post("/pay", async (req, res) => {
   console.log("📩 Payment Request:", req.body);
   try {
-    const { amount, transactionId } = req.body;
-    const token = await getAccessToken();
+    const { amount, currency = "inr" } = req.body;
 
-    const payload = {
-      merchantTransactionId: transactionId,
-      merchantUserId: "U123", // replace with actual user ID
-      amount: amount * 100, // in paise
-      redirectUrl: "https://roko-backend.onrender.com/payment/callback",
-      callbackUrl: "https://roko-backend.onrender.com/status",
-      paymentInstrument: { type: "PAY_PAGE" },
-    };
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount * 100, // convert to paise
+      currency,
+      payment_method_types: ["card"],
+    });
 
-    const response = await axios.post(
-      `${phonePeBaseUrl}/apis/pg-sandbox/v1/pay`,
-      payload,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    console.log("📤 Stripe PaymentIntent Created:", paymentIntent.id);
 
-    console.log("📤 PhonePe Raw Response:", response.data);
-
-    res.json(response.data);
+    res.json({
+      clientSecret: paymentIntent.client_secret,
+      paymentIntentId: paymentIntent.id,
+    });
   } catch (err) {
-    console.error(
-      "Payment initiation error:",
-      err.response?.data || err.message
-    );
+    console.error("Stripe Payment initiation error:", err.message);
     res.status(500).send("Payment initiation failed");
   }
 });
 
-// 📌 Payment Status Check
+// 📌 Payment Status Check (Stripe)
 app.post("/status", async (req, res) => {
   try {
-    const { transactionId } = req.body;
-    const token = await getAccessToken();
+    const { paymentIntentId } = req.body;
 
-    const response = await axios.get(
-      `${phonePeBaseUrl}/apis/pg-sandbox/v1/status/${transactionId}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
 
-    res.json(response.data);
+    res.json({
+      status: paymentIntent.status,
+      id: paymentIntent.id,
+      amount: paymentIntent.amount,
+      currency: paymentIntent.currency,
+    });
   } catch (err) {
-    console.error("Status check error:", err.response?.data || err.message);
+    console.error("Stripe Status check error:", err.message);
     res.status(500).send("Status check failed");
   }
 });
