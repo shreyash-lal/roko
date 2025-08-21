@@ -27,7 +27,7 @@ const UploadAssignment = () => {
 
     const token = localStorage.getItem('token');
     if (!token) {
-      alert('Assignment upoaded successfully!');
+      alert('Please login first to upload an assignment!');
       return;
     }
 
@@ -48,8 +48,7 @@ const UploadAssignment = () => {
         data,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`, // check backend, if it needs plain token change it
           },
         }
       );
@@ -69,8 +68,8 @@ const UploadAssignment = () => {
         alert('Something went wrong!');
       }
     } catch (error) {
-      console.error(error);
-      alert('Error uploading assignment.');
+      console.error('Upload error:', error.response?.data || error.message);
+      alert(error.response?.data?.message || 'Error uploading assignment.');
     }
   };
 
