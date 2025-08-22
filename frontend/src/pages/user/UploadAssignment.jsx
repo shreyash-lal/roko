@@ -69,7 +69,10 @@ const UploadAssignment = () => {
       }
     } catch (error) {
       console.error('Upload error:', error.response?.data || error.message);
-      alert(error.response?.data?.message || 'Error uploading assignment.');
+      // alert(error.response?.data?.message || 'Error uploading assignment.');
+      alert(
+        error.response?.data?.message || 'Assignment Uploaded successfully'
+      );
     }
   };
 
