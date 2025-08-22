@@ -197,7 +197,7 @@ const OngoingAssignment = () => {
               rel="noopener noreferrer"
               className="ongoingassignment-link"
             >
-              📄 View PDF
+              📄 View File
             </a>
           </div>
 
