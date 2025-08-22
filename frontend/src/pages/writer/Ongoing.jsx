@@ -145,11 +145,11 @@ const OngoingAssignment = () => {
 
   // Dummy assignment data
   const assignment = {
-    title: 'AI Research Paper',
-    subject: 'Artificial Intelligence',
+    title: 'Mern Stack Project',
+    subject: 'Development',
     description:
-      'Write a detailed research paper on Neural Networks and their applications.',
-    deadline: '25th August 2025',
+      'I want to make a report on making of food delivery application in MERN Stack',
+    deadline: '16th August 2025',
     fileUrl: 'https://www.ijrti.org/papers/IJRTI2304061.pdf',
     imageUrl: '/2.png',
   };
